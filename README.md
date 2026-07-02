@@ -84,7 +84,7 @@ If you enjoy writing the same wiring for every project, by all means. LatchSync 
 - [ ] Idempotency + deduplication
 - [ ] Conflict resolution strategies
 - [ ] Transaction ordering guarantees
-- [ ] `LatchSync-p2p` — phone-to-phone sync over WiFi Direct / Nearby API
+- [ ] `latchsync-p2p` — phone-to-phone sync over WiFi Direct / Nearby API
 - [ ] Encryption at rest
 - [ ] Sync telemetry
 
