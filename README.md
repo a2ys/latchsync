@@ -1,16 +1,16 @@
-# MeshSync
+# LatchSync
 
-> Room made local storage easy. MeshSync makes synchronization easy.
+> Room made local storage easy. LatchSync makes synchronization easy.
 
 Every Android app that needs to work offline ends up writing the same thing. A Room database to hold pending operations. A WorkManager job to retry when the network is back. Network callbacks to detect when the network is back. Deduplication so the same request does not go twice. Conflict handling for when the server has moved on without you.
 
 You write it once, forget it. You write it again in the next project. And again.
 
-MeshSync is that code, extracted into a library you drop in and never think about again.
+LatchSync is that code, extracted into a library you drop in and never think about again.
 
 ```kotlin
 // This is where you are headed.
-MeshSync.enqueue(
+LatchSync.enqueue(
     SyncOperation(
         id = UUID.randomUUID().toString(),
         type = "PAYMENT",
@@ -19,7 +19,7 @@ MeshSync.enqueue(
 )
 ```
 
-No WorkManager boilerplate. No Room DAOs. No network callbacks. MeshSync stores it locally, watches the network, and retries — even if your app is killed in between.
+No WorkManager boilerplate. No Room DAOs. No network callbacks. LatchSync stores it locally, watches the network, and retries — even if your app is killed in between.
 
 ## The problem, concretely
 
@@ -29,7 +29,7 @@ If you have not thought about it — the request fails silently, and your user h
 
 The standard answer is: store it in Room, schedule a WorkManager job, add a NetworkCallback, handle retries, deduplicate the requests, resolve conflicts. That is six things for one feature. And you will write all six again in the next app, and the one after that.
 
-MeshSync handles all six. You just enqueue.
+LatchSync handles all six. You just enqueue.
 
 ## Features
 
@@ -44,7 +44,7 @@ MeshSync handles all six. You just enqueue.
 ## How it works
 
 ```
-MeshSync.enqueue(op)
+LatchSync.enqueue(op)
         │
   LocalQueue (Room)         ← persisted immediately
         │
@@ -58,13 +58,13 @@ MeshSync.enqueue(op)
   (WorkManager backoff)    ─────────────┘
 ```
 
-Everything internal stays under `internal/`. The only surface you ever touch is `MeshSync`, `SyncOperation`, and `SyncState`. Everything else is an implementation detail.
+Everything internal stays under `internal/`. The only surface you ever touch is `LatchSync`, `SyncOperation`, and `SyncState`. Everything else is an implementation detail.
 
 ## Why not just use WorkManager + Room directly?
 
-You can. MeshSync *is* WorkManager + Room — with the wiring written for you and the edge cases handled.
+You can. LatchSync *is* WorkManager + Room — with the wiring written for you and the edge cases handled.
 
-|  | Room + WorkManager | MeshSync |
+|  | Room + WorkManager | LatchSync |
 |---|---|---|
 | Local persistence | ✓ you write it | ✓ built in |
 | Auto-retry | ✓ you write it | ✓ built in |
@@ -74,7 +74,7 @@ You can. MeshSync *is* WorkManager + Room — with the wiring written for you an
 | Observable state | ✗ you write it | ✓ built in |
 | P2P sync | ✗ not possible | ✓ coming soon |
 
-If you enjoy writing the same wiring for every project, by all means. MeshSync is for everyone else.
+If you enjoy writing the same wiring for every project, by all means. LatchSync is for everyone else.
 
 ## Roadmap
 
@@ -84,13 +84,13 @@ If you enjoy writing the same wiring for every project, by all means. MeshSync i
 - [ ] Idempotency + deduplication
 - [ ] Conflict resolution strategies
 - [ ] Transaction ordering guarantees
-- [ ] `meshsync-p2p` — phone-to-phone sync over WiFi Direct / Nearby API
+- [ ] `LatchSync-p2p` — phone-to-phone sync over WiFi Direct / Nearby API
 - [ ] Encryption at rest
 - [ ] Sync telemetry
 
 ## Status
 
-MeshSync is actively being built in public. Nothing is released yet — but everything is being documented as it happens. Watch the repo to follow along.
+LatchSync is actively being built in public. Nothing is released yet — but everything is being documented as it happens. Watch the repo to follow along.
 
 If you have hit pain points with offline sync in your own apps, open an issue and describe what you needed that did not exist. That is how the roadmap gets shaped.
 
